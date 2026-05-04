@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#F5C518">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="ZEUS">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZEUS — IA por Benja Ruizdiaz</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root { --gold: #F5C518; --gold-dark: #C49A10; --gold-text: #7a5f00; --dark: #0a0a14; --bg: #07070f; }
+body { font-family: 'Inter', sans-serif; background: var(--bg); color: #f0f0f0; min-height: 100vh; overflow-x: hidden; }
+.bg-grid { position: fixed; inset: 0; pointer-events: none; z-index: 0; background-image: linear-gradient(rgba(245,197,24,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(245,197,24,0.025) 1px, transparent 1px); background-size: 40px 40px; }
+.bg-glow { position: fixed; top: -150px; left: 50%; transform: translateX(-50%); width: 700px; height: 500px; pointer-events: none; z-index: 0; background: radial-gradient(ellipse, rgba(245,197,24,0.06) 0%, transparent 70%); }
+
+/* ══ PRICING ══ */
+#screen-pricing { position: relative; z-index: 1; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 3rem 1rem; }
+.container { width: 100%; max-width: 900px; }
+.hero { text-align: center; margin-bottom: 3.5rem; }
+.logo-box { width: 52px; height: 52px; border-radius: 14px; background: var(--gold); display: flex; align-items: center; justify-content: center; font-size: 24px; margin: 0 auto 1.5rem; animation: pulse-logo 3s ease-in-out infinite; cursor: pointer; user-select: none; }
+@keyframes pulse-logo { 0%,100%{box-shadow:0 0 30px rgba(245,197,24,0.4)} 50%{box-shadow:0 0 55px rgba(245,197,24,0.65)} }
+.hero-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 6px; color: rgba(245,197,24,0.6); text-transform: uppercase; margin-bottom: 12px; }
+.hero h1 { font-family: 'Syne', sans-serif; font-size: clamp(32px,5vw,52px); font-weight: 800; letter-spacing: -1px; color: #fff; margin-bottom: 14px; line-height: 1.1; }
+.hero h1 span { color: var(--gold); }
+.hero p { font-size: 14px; color: rgba(255,255,255,0.4); font-weight: 300; line-height: 1.6; }
+.grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin-bottom: 2rem; align-items: start; }
+@media(max-width:700px){ .grid{grid-template-columns:repeat(2,1fr)} }
+@media(max-width:420px){ .grid{grid-template-columns:1fr} }
+.card { border-radius: 20px; padding: 1.5rem 1.2rem 1.2rem; display: flex; flex-direction: column; gap: 18px; position: relative; overflow: hidden; transition: transform 0.2s; }
+.card:hover { transform: translateY(-4px); }
+.card-free  { background: #0f0f1e; border: 0.5px solid rgba(255,255,255,0.07); }
+.card-basic { background: #121220; border: 0.5px solid rgba(255,255,255,0.1); }
+.card-pro   { background: var(--dark); border: 1px solid rgba(245,197,24,0.35); }
+.card-pro::before { content:''; position:absolute; top:-60px; right:-60px; width:150px; height:150px; background:radial-gradient(circle,rgba(245,197,24,0.12),transparent 70%); pointer-events:none; }
+.card-elite { background: var(--dark); border: 0.5px solid rgba(245,197,24,0.15); }
+.pop-badge { position:absolute; top:14px; right:14px; background:rgba(245,197,24,0.12); border:0.5px solid rgba(245,197,24,0.35); color:var(--gold); font-size:9px; font-weight:600; padding:3px 9px; border-radius:20px; letter-spacing:1.5px; }
+.plan-tag { font-size:9px; font-weight:600; letter-spacing:3px; text-transform:uppercase; margin-bottom:4px; color:rgba(255,255,255,0.3); }
+.card-pro .plan-tag { color:rgba(245,197,24,0.55); }
+.card-elite .plan-tag { color:rgba(245,197,24,0.35); }
+.plan-name { font-family:'Syne',sans-serif; font-size:20px; font-weight:800; letter-spacing:-0.5px; color:#fff; }
+.price-block { display:flex; align-items:baseline; gap:3px; }
+.amt { font-size:34px; font-weight:600; color:#fff; letter-spacing:-1.5px; }
+.per { font-size:12px; color:rgba(255,255,255,0.3); }
+.sep { height:0.5px; background:rgba(255,255,255,0.06); }
+.card-pro .sep { background:rgba(245,197,24,0.12); }
+.feats { display:flex; flex-direction:column; gap:9px; flex:1; }
+.feat { display:flex; align-items:center; gap:8px; font-size:12px; line-height:1.3; }
+.feat.on { color:rgba(255,255,255,0.8); }
+.feat.off { color:rgba(255,255,255,0.2); }
+.ck { width:16px; height:16px; border-radius:5px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.ck-on { background:rgba(245,197,24,0.12); border:0.5px solid rgba(245,197,24,0.3); }
+.ck-off { background:rgba(255,255,255,0.04); border:0.5px solid rgba(255,255,255,0.08); }
+.ck svg { width:8px; height:8px; }
+.pbtn { width:100%; padding:11px; border-radius:12px; font-size:13px; font-weight:600; font-family:'Inter',sans-serif; cursor:pointer; letter-spacing:0.3px; transition:opacity 0.2s,transform 0.1s; text-decoration:none; text-align:center; display:block; border:none; }
+.pbtn:hover{opacity:0.85} .pbtn:active{transform:scale(0.98)}
+.btn-ghost    { background:transparent; border:0.5px solid rgba(255,255,255,0.12) !important; color:rgba(255,255,255,0.5); }
+.btn-mp-basic { background:#1a1a30; border:1px solid rgba(255,255,255,0.15) !important; color:#fff; }
+.btn-mp-pro   { background:var(--gold); color:var(--gold-text); }
+.btn-mp-elite { background:rgba(245,197,24,0.08); border:0.5px solid rgba(245,197,24,0.3) !important; color:var(--gold); }
+.foot { display:flex; align-items:center; justify-content:center; gap:8px; font-size:12px; color:rgba(255,255,255,0.2); flex-wrap:wrap; }
+.foot strong { color:var(--gold); font-weight:500; }
+
+/* ══ CHAT ══ */
+#screen-chat { display:none; position:fixed; inset:0; z-index:10; flex-direction:column; background:var(--bg); }
+#screen-chat.active { display:flex; }
+.chat-header { padding:12px 16px; display:flex; align-items:center; gap:10px; border-bottom:0.5px solid rgba(245,197,24,0.12); background:rgba(7,7,15,0.95); backdrop-filter:blur(12px); flex-shrink:0; flex-wrap:wrap; }
+.chat-logo { width:34px; height:34px; border-radius:8px; background:var(--gold); display:flex; align-items:center; justify-content:center; font-size:15px; flex-shrink:0; }
+.chat-info h2 { font-family:'Syne',sans-serif; font-size:14px; font-weight:800; letter-spacing:2px; color:var(--gold); }
+.chat-info p { font-size:10px; color:rgba(255,255,255,0.3); }
+.plan-pill { margin-left:6px; background:rgba(245,197,24,0.1); border:0.5px solid rgba(245,197,24,0.25); color:var(--gold); font-size:10px; font-weight:600; padding:2px 7px; border-radius:20px; letter-spacing:1px; }
+.plan-pill.admin-pill { background:rgba(255,50,50,0.15); border-color:rgba(255,50,50,0.3); color:#ff6b6b; }
+.chat-status { display:flex; align-items:center; gap:5px; font-size:11px; color:#4ecca3; }
+.status-dot { width:6px; height:6px; border-radius:50%; background:#4ecca3; animation:blink 2s ease-in-out infinite; }
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+.hbtn { background:rgba(255,255,255,0.05); border:0.5px solid rgba(255,255,255,0.1); color:rgba(255,255,255,0.4); font-size:11px; padding:5px 10px; border-radius:8px; cursor:pointer; font-family:'Inter',sans-serif; white-space:nowrap; }
+.hbtn:hover { color:#fff; border-color:rgba(255,255,255,0.2); }
+.hbtn-gold { background:rgba(245,197,24,0.08); border:0.5px solid rgba(245,197,24,0.2); color:var(--gold); }
+.back-btn { background:transparent; border:0.5px solid rgba(255,255,255,0.1); color:rgba(255,255,255,0.35); font-size:11px; padding:5px 10px; border-radius:8px; cursor:pointer; font-family:'Inter',sans-serif; margin-left:auto; }
+.limit-bar { padding:7px 16px; background:rgba(245,197,24,0.03); border-bottom:0.5px solid rgba(245,197,24,0.08); display:flex; gap:14px; font-size:11px; color:rgba(255,255,255,0.3); flex-wrap:wrap; }
+.limit-item span { color:var(--gold); font-weight:600; }
+#messages { flex:1; overflow-y:auto; padding:16px; display:flex; flex-direction:column; gap:12px; scroll-behavior:smooth; }
+#messages::-webkit-scrollbar{width:3px}
+#messages::-webkit-scrollbar-thumb{background:rgba(245,197,24,0.2);border-radius:2px}
+.msg { display:flex; gap:10px; animation:fadeIn 0.3s ease; align-items:flex-start; }
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.msg.user { flex-direction:row-reverse; }
+.msg-av { width:32px; height:32px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:13px; flex-shrink:0; }
+.zeus-av { background:var(--gold); }
+.user-av { background:#1a1a35; border:0.5px solid rgba(245,197,24,0.2); color:var(--gold); font-family:'Syne',sans-serif; font-weight:700; font-size:9px; }
+.bubble { max-width:75%; padding:12px 15px; border-radius:10px; font-size:15px; line-height:1.75; }
+.msg.zeus .bubble { background:#0f0f1e; border:0.5px solid rgba(255,255,255,0.08); border-top-left-radius:2px; color:rgba(255,255,255,0.9); }
+.msg.user .bubble { background:#16162e; border:0.5px solid rgba(245,197,24,0.2); border-top-right-radius:2px; color:rgba(255,255,255,0.95); }
+/* Markdown */
+.bubble strong{color:#fff;font-weight:600}
+.bubble em{color:rgba(255,255,255,0.7);font-style:italic}
+.bubble code{background:rgba(245,197,24,0.08);border:0.5px solid rgba(245,197,24,0.15);border-radius:4px;padding:2px 6px;font-family:monospace;font-size:13px;color:var(--gold)}
+.bubble pre{background:rgba(0,0,0,0.4);border:0.5px solid rgba(255,255,255,0.08);border-radius:8px;padding:12px;margin:8px 0;overflow-x:auto}
+.bubble pre code{background:none;border:none;padding:0;font-size:13px;color:rgba(255,255,255,0.85)}
+.bubble ul,.bubble ol{padding-left:20px;margin:6px 0}
+.bubble li{margin:3px 0;color:rgba(255,255,255,0.85)}
+.bubble h1,.bubble h2,.bubble h3{color:#fff;font-family:'Syne',sans-serif;margin:10px 0 5px}
+.bubble h1{font-size:17px}.bubble h2{font-size:15px}.bubble h3{font-size:14px}
+.bubble hr{border:none;border-top:0.5px solid rgba(255,255,255,0.1);margin:10px 0}
+.preview-img { width:100%; max-width:200px; border-radius:8px; margin-top:8px; border:0.5px solid rgba(245,197,24,0.2); }
+.file-badge { display:inline-flex; align-items:center; gap:6px; background:rgba(245,197,24,0.08); border:0.5px solid rgba(245,197,24,0.2); border-radius:8px; padding:5px 10px; font-size:12px; color:var(--gold); margin-top:8px; }
+.gen-image { width:100%; max-width:360px; aspect-ratio:1/1; object-fit:cover; border-radius:10px; display:block; margin-top:10px; border:0.5px solid rgba(245,197,24,0.25); box-shadow:0 8px 32px rgba(0,0,0,0.5); }
+.img-label { font-size:11px; color:rgba(255,255,255,0.3); margin-top:6px; font-style:italic; }
+.dl-btn { display:inline-flex; align-items:center; gap:5px; margin-top:8px; font-size:12px; color:var(--gold); border:0.5px solid rgba(245,197,24,0.25); border-radius:8px; padding:5px 12px; cursor:pointer; background:rgba(245,197,24,0.05); }
+.share-btn { display:inline-flex; align-items:center; gap:5px; margin-top:8px; margin-left:6px; font-size:12px; color:rgba(255,255,255,0.4); border:0.5px solid rgba(255,255,255,0.1); border-radius:8px; padding:5px 12px; cursor:pointer; }
+.share-btn:hover { color:var(--gold); border-color:rgba(245,197,24,0.3); }
+.upgrade-banner { background:rgba(245,197,24,0.05); border:0.5px solid rgba(245,197,24,0.2); border-radius:10px; padding:12px 14px; margin-top:8px; }
+.upgrade-banner p { font-size:13px; color:rgba(255,255,255,0.7); margin-bottom:10px; }
+.upgrade-btns { display:flex; flex-direction:column; gap:6px; }
+.upgrade-btn { padding:8px 12px; border-radius:8px; font-size:12px; font-weight:600; cursor:pointer; text-align:center; text-decoration:none; display:block; }
+.u-basic { background:rgba(255,255,255,0.08); color:rgba(255,255,255,0.7); }
+.u-pro { background:var(--gold); color:var(--gold-text); border:none; }
+.u-elite { background:rgba(245,197,24,0.08); border:0.5px solid rgba(245,197,24,0.3); color:var(--gold); }
+.typing-bubble { display:flex; align-items:center; gap:5px; padding:14px 16px; }
+.typing-bubble span { width:7px; height:7px; border-radius:50%; background:var(--gold); opacity:0.4; animation:bounce 1.2s infinite; }
+.typing-bubble span:nth-child(2){animation-delay:0.2s} .typing-bubble span:nth-child(3){animation-delay:0.4s}
+@keyframes bounce{0%,60%,100%{transform:translateY(0);opacity:0.4}30%{transform:translateY(-6px);opacity:1}}
+#input-area { padding:10px 16px 16px; flex-shrink:0; border-top:0.5px solid rgba(245,197,24,0.08); background:rgba(7,7,15,0.95); backdrop-filter:blur(12px); }
+.chips { display:flex; flex-wrap:wrap; gap:5px; margin-bottom:8px; }
+.chip { font-size:11px; padding:4px 10px; border-radius:8px; border:0.5px solid rgba(255,255,255,0.1); background:transparent; color:rgba(255,255,255,0.35); cursor:pointer; font-family:'Inter',sans-serif; transition:all 0.2s; }
+.chip:hover { border-color:var(--gold); color:var(--gold); }
+#attach-preview { display:none; align-items:center; gap:8px; background:rgba(245,197,24,0.06); border:0.5px solid rgba(245,197,24,0.2); border-radius:8px; padding:7px 12px; margin-bottom:8px; }
+#attach-preview.show { display:flex; }
+#attach-name { font-size:12px; color:rgba(255,255,255,0.6); flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+#attach-remove { background:none; border:none; color:rgba(255,255,255,0.3); cursor:pointer; font-size:16px; }
+.input-row { display:flex; gap:8px; align-items:flex-end; background:#0f0f1e; border:0.5px solid rgba(255,255,255,0.08); border-radius:12px; padding:8px 8px 8px 14px; transition:border-color 0.2s; }
+.input-row:focus-within { border-color:rgba(245,197,24,0.3); }
+#user-input { flex:1; background:transparent; border:none; outline:none; font-size:14px; font-family:'Inter',sans-serif; color:rgba(255,255,255,0.85); resize:none; max-height:120px; line-height:1.5; }
+#user-input::placeholder { color:rgba(255,255,255,0.2); }
+.ibtn { width:33px; height:33px; border-radius:8px; background:transparent; border:0.5px solid rgba(255,255,255,0.1); cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; color:rgba(255,255,255,0.4); font-size:15px; transition:all 0.2s; }
+.ibtn:hover { border-color:var(--gold); color:var(--gold); }
+.ibtn.recording { border-color:#ff6b6b; color:#ff6b6b; background:rgba(255,107,107,0.1); animation:pulse-rec 1s ease-in-out infinite; }
+@keyframes pulse-rec{0%,100%{box-shadow:0 0 0 0 rgba(255,107,107,0.4)}50%{box-shadow:0 0 0 5px rgba(255,107,107,0)}}
+#send-btn { width:33px; height:33px; border-radius:8px; background:var(--gold); border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+#send-btn:hover { background:var(--gold-dark); transform:scale(1.05); }
+#send-btn svg { width:13px; height:13px; fill:var(--gold-text); }
+.hint { font-size:10px; color:rgba(255,255,255,0.15); text-align:center; margin-top:5px; }
+#file-input { display:none; }
+
+/* ══ ADMIN MODAL ══ */
+#admin-modal { display:none; position:fixed; inset:0; z-index:100; background:rgba(0,0,0,0.85); backdrop-filter:blur(8px); align-items:center; justify-content:center; }
+#admin-modal.show { display:flex; }
+.admin-box { background:#0f0f1e; border:1px solid rgba(245,197,24,0.3); border-radius:20px; padding:2rem; width:90%; max-width:340px; text-align:center; }
+.admin-box h3 { font-family:'Syne',sans-serif; font-size:18px; font-weight:800; color:var(--gold); margin-bottom:6px; }
+.admin-box p { font-size:13px; color:rgba(255,255,255,0.4); margin-bottom:20px; }
+.admin-input { width:100%; background:#1a1a35; border:0.5px solid rgba(245,197,24,0.2); border-radius:10px; padding:12px 16px; font-size:14px; color:#fff; font-family:'Inter',sans-serif; outline:none; margin-bottom:12px; text-align:center; letter-spacing:2px; }
+.admin-input:focus { border-color:var(--gold); }
+.admin-btn { width:100%; padding:12px; border-radius:10px; background:var(--gold); border:none; color:var(--gold-text); font-size:14px; font-weight:700; font-family:'Syne',sans-serif; cursor:pointer; }
+.admin-cancel { margin-top:10px; font-size:12px; color:rgba(255,255,255,0.3); cursor:pointer; display:block; }
+
+/* ══ ADMIN DASHBOARD ══ */
+#screen-admin { display:none; position:fixed; inset:0; z-index:50; flex-direction:column; background:var(--bg); }
+#screen-admin.active { display:flex; }
+.adm-header { padding:14px 20px; display:flex; align-items:center; justify-content:space-between; border-bottom:0.5px solid rgba(245,197,24,0.15); background:rgba(7,7,15,0.95); backdrop-filter:blur(12px); flex-shrink:0; }
+.adm-title { display:flex; align-items:center; gap:10px; }
+.adm-title h2 { font-family:'Syne',sans-serif; font-size:14px; font-weight:800; color:var(--gold); letter-spacing:2px; }
+.adm-close { background:rgba(255,50,50,0.08); border:0.5px solid rgba(255,50,50,0.2); color:#ff6b6b; font-size:12px; padding:7px 14px; border-radius:8px; cursor:pointer; font-family:'Inter',sans-serif; }
+.adm-body { flex:1; overflow-y:auto; padding:20px; display:flex; flex-direction:column; gap:16px; }
+.adm-stats { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
+@media(max-width:600px){ .adm-stats{grid-template-columns:repeat(2,1fr)} }
+.adm-stat { background:#0f0f1e; border:0.5px solid rgba(245,197,24,0.12); border-radius:14px; padding:14px; text-align:center; }
+.adm-stat-val { font-family:'Syne',sans-serif; font-size:28px; font-weight:800; color:var(--gold); }
+.adm-stat-lbl { font-size:11px; color:rgba(255,255,255,0.3); margin-top:4px; }
+.adm-section { background:#0f0f1e; border:0.5px solid rgba(255,255,255,0.07); border-radius:14px; padding:14px; }
+.adm-section-title { font-family:'Syne',sans-serif; font-size:12px; font-weight:700; color:rgba(255,255,255,0.5); letter-spacing:1.5px; text-transform:uppercase; margin-bottom:12px; }
+.adm-plan-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:8px; }
+.adm-plan-btn { padding:12px; border-radius:10px; font-size:13px; font-weight:600; cursor:pointer; font-family:'Inter',sans-serif; border:none; transition:opacity 0.2s; }
+.adm-plan-btn:hover { opacity:0.8; }
+.apb-free  { background:rgba(255,255,255,0.08); color:#fff; }
+.apb-basic { background:rgba(255,255,255,0.12); color:#fff; }
+.apb-pro   { background:var(--gold); color:var(--gold-text); }
+.apb-elite { background:rgba(245,197,24,0.08); border:0.5px solid rgba(245,197,24,0.3) !important; color:var(--gold); }
+.adm-chat-item { background:rgba(255,255,255,0.03); border:0.5px solid rgba(255,255,255,0.07); border-radius:10px; padding:11px 13px; cursor:pointer; transition:all 0.2s; margin-bottom:6px; }
+.adm-chat-item:hover { border-color:rgba(245,197,24,0.3); }
+.aci-top { display:flex; align-items:center; gap:8px; margin-bottom:4px; }
+.aci-plan { font-size:10px; font-weight:600; padding:2px 7px; border-radius:20px; background:rgba(245,197,24,0.1); border:0.5px solid rgba(245,197,24,0.2); color:var(--gold); }
+.aci-date { font-size:10px; color:rgba(255,255,255,0.2); margin-left:auto; }
+.aci-preview { font-size:12px; color:rgba(255,255,255,0.5); overflow:hidden; display:-webkit-box; -webkit-line-clamp:1; -webkit-box-orient:vertical; }
+.aci-count { font-size:10px; color:rgba(255,255,255,0.2); margin-top:3px; }
+.adm-link { display:flex; align-items:center; justify-content:space-between; padding:10px 13px; background:rgba(255,255,255,0.03); border:0.5px solid rgba(255,255,255,0.07); border-radius:10px; text-decoration:none; margin-bottom:6px; }
+.adm-link span:first-child { font-size:13px; color:rgba(255,255,255,0.6); }
+.adm-link span:last-child { font-size:12px; color:var(--gold); }
+
+/* ══ HISTORY SCREEN ══ */
+#screen-history { display:none; position:fixed; inset:0; z-index:30; flex-direction:column; background:var(--bg); }
+#screen-history.active { display:flex; }
+.hist-header { padding:14px 20px; display:flex; align-items:center; gap:12px; border-bottom:0.5px solid rgba(245,197,24,0.12); background:rgba(7,7,15,0.95); backdrop-filter:blur(12px); flex-shrink:0; }
+.hist-header h2 { font-family:'Syne',sans-serif; font-size:15px; font-weight:800; color:var(--gold); letter-spacing:2px; flex:1; }
+.hist-clear { background:rgba(255,50,50,0.08); border:0.5px solid rgba(255,50,50,0.2); color:#ff6b6b; font-size:12px; padding:6px 12px; border-radius:8px; cursor:pointer; font-family:'Inter',sans-serif; }
+.hist-back { background:transparent; border:0.5px solid rgba(255,255,255,0.1); color:rgba(255,255,255,0.35); font-size:12px; padding:6px 12px; border-radius:8px; cursor:pointer; font-family:'Inter',sans-serif; }
+.new-chat-btn { margin:12px 20px 0; padding:12px; border-radius:12px; background:rgba(245,197,24,0.08); border:0.5px solid rgba(245,197,24,0.2); color:var(--gold); font-size:13px; font-weight:600; cursor:pointer; font-family:'Syne',sans-serif; letter-spacing:1px; text-align:center; }
+.new-chat-btn:hover { background:rgba(245,197,24,0.15); }
+#history-list { flex:1; overflow-y:auto; padding:12px 20px; display:flex; flex-direction:column; gap:8px; }
+.hist-item { background:#0f0f1e; border:0.5px solid rgba(255,255,255,0.07); border-radius:12px; padding:13px 15px; cursor:pointer; transition:all 0.2s; }
+.hist-item:hover { border-color:rgba(245,197,24,0.3); background:#13132a; }
+.hist-item-top { display:flex; align-items:center; gap:8px; margin-bottom:5px; }
+.hist-plan { font-size:10px; font-weight:600; padding:2px 8px; border-radius:20px; background:rgba(245,197,24,0.1); border:0.5px solid rgba(245,197,24,0.2); color:var(--gold); }
+.hist-date { font-size:11px; color:rgba(255,255,255,0.25); margin-left:auto; }
+.hist-preview { font-size:13px; color:rgba(255,255,255,0.6); line-height:1.4; overflow:hidden; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; }
+.hist-count { font-size:11px; color:rgba(255,255,255,0.25); margin-top:5px; }
+.hist-empty { text-align:center; padding:3rem 1rem; color:rgba(255,255,255,0.25); font-size:14px; }
+
+/* ══ VOICE SCREEN ══ */
+#screen-voice { display:none; position:fixed; inset:0; z-index:20; flex-direction:column; align-items:center; justify-content:center; background:var(--bg); }
+#screen-voice.active { display:flex; }
+.voice-back-btn { position:absolute; top:20px; left:20px; background:transparent; border:0.5px solid rgba(255,255,255,0.1); color:rgba(255,255,255,0.4); font-size:13px; padding:8px 14px; border-radius:10px; cursor:pointer; font-family:'Inter',sans-serif; }
+.voice-center { display:flex; flex-direction:column; align-items:center; gap:24px; }
+.voice-orb { width:160px; height:160px; border-radius:50%; background:rgba(245,197,24,0.08); border:1.5px solid rgba(245,197,24,0.2); display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all 0.3s; position:relative; }
+.voice-orb.listening { background:rgba(245,197,24,0.15); border-color:var(--gold); animation:orb-pulse 1.5s ease-in-out infinite; }
+.voice-orb.speaking { background:rgba(78,204,163,0.1); border-color:#4ecca3; animation:orb-pulse-g 1.5s ease-in-out infinite; }
+@keyframes orb-pulse{0%,100%{box-shadow:0 0 0 0 rgba(245,197,24,0.3)}50%{box-shadow:0 0 0 20px rgba(245,197,24,0)}}
+@keyframes orb-pulse-g{0%,100%{box-shadow:0 0 0 0 rgba(78,204,163,0.3)}50%{box-shadow:0 0 0 20px rgba(78,204,163,0)}}
+.orb-ring { position:absolute; inset:-12px; border-radius:50%; border:0.5px solid rgba(245,197,24,0.1); }
+.orb-ring2 { position:absolute; inset:-24px; border-radius:50%; border:0.5px solid rgba(245,197,24,0.06); }
+.orb-icon { font-size:52px; }
+.voice-status { font-size:14px; color:rgba(255,255,255,0.4); text-align:center; }
+.voice-status.active { color:var(--gold); }
+.voice-status.speaking { color:#4ecca3; }
+.voice-transcript { max-width:300px; text-align:center; font-size:15px; color:rgba(255,255,255,0.8); line-height:1.5; min-height:50px; }
+.voice-response { max-width:320px; text-align:center; font-size:13px; color:rgba(255,255,255,0.45); line-height:1.6; max-height:120px; overflow-y:auto; }
+.voice-hint { font-size:11px; color:rgba(255,255,255,0.15); }
+
+/* ══ TRENDING MODAL ══ */
+#trending-modal { display:none; position:fixed; inset:0; z-index:40; background:rgba(0,0,0,0.8); backdrop-filter:blur(8px); align-items:flex-end; justify-content:center; }
+#trending-modal.show { display:flex; }
+.trending-box { background:#0f0f1e; border:0.5px solid rgba(245,197,24,0.15); border-radius:20px 20px 0 0; padding:1.5rem; width:100%; max-width:720px; max-height:80vh; overflow-y:auto; }
+.trending-box h3 { font-family:'Syne',sans-serif; font-size:16px; font-weight:800; color:var(--gold); margin-bottom:4px; }
+.trending-box p { font-size:12px; color:rgba(255,255,255,0.3); margin-bottom:16px; }
+.trending-close { float:right; background:none; border:none; color:rgba(255,255,255,0.3); font-size:20px; cursor:pointer; margin-top:-4px; }
+.trending-section { margin-bottom:16px; }
+.trending-section h4 { font-size:11px; font-weight:600; letter-spacing:2px; color:rgba(245,197,24,0.5); text-transform:uppercase; margin-bottom:8px; }
+.trending-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:6px; }
+.trending-item { background:rgba(255,255,255,0.03); border:0.5px solid rgba(255,255,255,0.07); border-radius:10px; padding:10px 12px; cursor:pointer; transition:all 0.2s; }
+.trending-item:hover { border-color:var(--gold); background:rgba(245,197,24,0.05); }
+.ti-icon { font-size:18px; margin-bottom:4px; }
+.ti-text { font-size:12px; color:rgba(255,255,255,0.7); line-height:1.4; }
+</style>
+</head>
+<body>
+<div class="bg-grid"></div>
+<div class="bg-glow"></div>
+
+<!-- ══ ADMIN MODAL ══ -->
+<div id="admin-modal">
+  <div class="admin-box">
+    <h3>🔐 ACCESO ADMIN</h3>
+    <p>Ingresá tu contraseña secreta</p>
+    <input type="password" class="admin-input" id="admin-pass" placeholder="••••••••" autocomplete="off" onkeydown="if(event.key==='Enter')verifyAdmin()"/>
+    <button class="admin-btn" onclick="verifyAdmin()">ENTRAR</button>
+    <span class="admin-cancel" onclick="closeAdminModal()">Cancelar</span>
+  </div>
+</div>
+
+<!-- ══ ADMIN DASHBOARD ══ -->
+<div id="screen-admin">
+  <div class="adm-header">
+    <div class="adm-title">
+      <div style="width:30px;height:30px;border-radius:7px;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:13px;">⚡</div>
+      <h2>ZEUS ADMIN</h2>
+    </div>
+    <button class="adm-close" onclick="closeAdminDash()">✕ Salir</button>
+  </div>
+  <div class="adm-body">
+    <div class="adm-stats">
+      <div class="adm-stat"><div class="adm-stat-val" id="stat-chats">0</div><div class="adm-stat-lbl">Chats totales</div></div>
+      <div class="adm-stat"><div class="adm-stat-val" id="stat-msgs">0</div><div class="adm-stat-lbl">Mensajes</div></div>
+      <div class="adm-stat"><div class="adm-stat-val" id="stat-imgs">0</div><div class="adm-stat-lbl">Usuarios únicos</div></div>
+      <div class="adm-stat"><div class="adm-stat-val" id="stat-days">0</div><div class="adm-stat-lbl">Imágenes gen.</div></div>
+    </div>
+    <div class="adm-section">
+      <div class="adm-section-title">⚡ Acceder a planes</div>
+      <div class="adm-plan-grid">
+        <button class="adm-plan-btn apb-free"  onclick="adminGoChat('FREE','Gratis')">🆓 FREE</button>
+        <button class="adm-plan-btn apb-basic" onclick="adminGoChat('BASICO','Starter · $5/mes')">⚡ BÁSICO</button>
+        <button class="adm-plan-btn apb-pro"   onclick="adminGoChat('PRO','Creator · $10/mes')">🔥 PRO</button>
+        <button class="adm-plan-btn apb-elite" onclick="adminGoChat('ELITE','Máximo · $25/mes')">👑 ÉLITE</button>
+      </div>
+    </div>
+    <div class="adm-section">
+      <div class="adm-section-title" style="display:flex;align-items:center;justify-content:space-between;">
+        <span>📋 Historial de chats</span>
+        <button onclick="adminClearChats()" style="background:rgba(255,50,50,0.1);border:0.5px solid rgba(255,50,50,0.2);color:#ff6b6b;font-size:11px;padding:3px 9px;border-radius:6px;cursor:pointer;font-family:'Inter',sans-serif;">🗑️ Borrar</button>
+      </div>
+      <div id="admin-chat-list"></div>
+    </div>
+    <div class="adm-section">
+      <div class="adm-section-title">⚙️ Links rápidos</div>
+      <a class="adm-link" href="https://railway.app" target="_blank"><span>Panel Railway</span><span>Abrir →</span></a>
+      <a class="adm-link" href="https://github.com/benjaruizdiaz/ZEUS" target="_blank"><span>Repositorio GitHub</span><span>Abrir →</span></a>
+      <a class="adm-link" href="https://www.mercadopago.com.ar/subscription-plans/list" target="_blank"><span>Suscripciones MercadoPago</span><span>Abrir →</span></a>
+      <a class="adm-link" href="https://marvelous-dasik-a0e79a.netlify.app" target="_blank"><span>Sitio Netlify</span><span>Abrir →</span></a>
+    </div>
+  </div>
+</div>
+
+<!-- ══ HISTORY SCREEN ══ -->
+<div id="screen-history">
+  <div class="hist-header">
+    <h2>📋 HISTORIAL</h2>
+    <button class="hist-clear" onclick="clearAllHistory()">🗑️ Borrar</button>
+    <button class="hist-back" onclick="closeHistory()">← Volver</button>
+  </div>
+  <button class="new-chat-btn" onclick="startNewChat()">⚡ Nuevo chat</button>
+  <div id="history-list"></div>
+</div>
+
+<!-- ══ VOICE SCREEN ══ -->
+<div id="screen-voice">
+  <button class="voice-back-btn" onclick="closeVoiceScreen()">← Chat</button>
+  <div class="voice-center">
+    <div class="voice-orb" id="voice-orb" onclick="toggleVoice()">
+      <div class="orb-ring"></div>
+      <div class="orb-ring2"></div>
+      <span class="orb-icon" id="orb-icon">⚡</span>
+    </div>
+    <div class="voice-status" id="voice-status">Tocá para hablar</div>
+    <div class="voice-transcript" id="voice-transcript"></div>
+    <div class="voice-response" id="voice-response"></div>
+    <div class="voice-hint">Tocá el orbe · ZEUS escucha y responde en voz</div>
+  </div>
+</div>
+
+<!-- ══ TRENDING MODAL ══ -->
+<div id="trending-modal">
+  <div class="trending-box">
+    <button class="trending-close" onclick="closeTrending()">✕</button>
+    <h3>🔥 Prompts Trending</h3>
+    <p>Tocá uno para usarlo</p>
+    <div class="trending-section">
+      <h4>📱 Influencer & Contenido</h4>
+      <div class="trending-grid">
+        <div class="trending-item" onclick="usePrompt('Dame 5 ideas de posts virales para Instagram sobre emprendimiento')"><div class="ti-icon">📱</div><div class="ti-text">5 ideas virales Instagram</div></div>
+        <div class="trending-item" onclick="usePrompt('Escribime un caption para TikTok que enganche en los primeros 3 segundos')"><div class="ti-icon">🎵</div><div class="ti-text">Caption viral TikTok</div></div>
+        <div class="trending-item" onclick="usePrompt('Dame ideas de contenido para una semana como influencer de lifestyle')"><div class="ti-icon">📅</div><div class="ti-text">Plan contenido semanal</div></div>
+        <div class="trending-item" onclick="usePrompt('Escribime un guión para un reel de 30 segundos de transformación antes y después')"><div class="ti-icon">🎬</div><div class="ti-text">Guión reel viral</div></div>
+      </div>
+    </div>
+    <div class="trending-section">
+      <h4>💼 Ventas & Negocios</h4>
+      <div class="trending-grid">
+        <div class="trending-item" onclick="usePrompt('Escribime un script de ventas para WhatsApp persuasivo y natural')"><div class="ti-icon">💬</div><div class="ti-text">Script ventas WhatsApp</div></div>
+        <div class="trending-item" onclick="usePrompt('Creame un copy irresistible para una historia de Instagram que venda')"><div class="ti-icon">✍️</div><div class="ti-text">Copy para historias</div></div>
+        <div class="trending-item" onclick="usePrompt('Dame 3 estrategias para conseguir mis primeros 10 clientes sin invertir')"><div class="ti-icon">🚀</div><div class="ti-text">Primeros 10 clientes</div></div>
+        <div class="trending-item" onclick="usePrompt('Escribime respuestas para las objeciones más comunes al vender por WhatsApp')"><div class="ti-icon">🤖</div><div class="ti-text">Respuestas a objeciones</div></div>
+      </div>
+    </div>
+    <div class="trending-section">
+      <h4>🎨 Imágenes IA</h4>
+      <div class="trending-grid">
+        <div class="trending-item" onclick="usePrompt('Generá una imagen de un logo minimalista dorado con rayo para tecnología')"><div class="ti-icon">⚡</div><div class="ti-text">Logo dorado tecnología</div></div>
+        <div class="trending-item" onclick="usePrompt('Generá una imagen de un flyer moderno para un negocio digital')"><div class="ti-icon">🖼️</div><div class="ti-text">Flyer negocio digital</div></div>
+        <div class="trending-item" onclick="usePrompt('Generá una imagen fotorrealista de un empresario en oficina futurista')"><div class="ti-icon">👔</div><div class="ti-text">Empresario futurista</div></div>
+        <div class="trending-item" onclick="usePrompt('Generá una imagen de una ciudad futurista de noche con luces doradas')"><div class="ti-icon">🌆</div><div class="ti-text">Ciudad futurista dorada</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PRICING ══ -->
+<div id="screen-pricing">
+  <div class="container">
+    <div class="hero">
+      <div class="logo-box" id="logo-box" onclick="logoClick()">⚡</div>
+      <p class="hero-eyebrow">Planes & Precios</p>
+      <h1>Empezá gratis.<br><span>Escalá</span> cuando quieras.</h1>
+      <p>Elegí tu plan y empezá a usar ZEUS ahora mismo.</p>
+    </div>
+    <div class="grid">
+      <div class="card card-free">
+        <div><div class="plan-tag">Free</div><div class="plan-name">Gratis</div></div>
+        <div class="price-block"><span class="amt">$0</span><span class="per">/mes</span></div>
+        <div class="sep"></div>
+        <div class="feats">
+          <div class="feat on"><div class="ck ck-on"><svg viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="#b8880a" stroke-width="1.8" stroke-linecap="round"/></svg></div>10 mensajes/día</div>
+          <div class="feat on"><div class="ck ck-on"><svg viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="#b8880a" stroke-width="1.8" stroke-linecap="round"/></svg></div>2 imágenes/día</div>
+          <div class="feat on"><div class="ck ck-on"><svg viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="#b8880a" stroke-width="1.8" stroke-linecap="round"/></svg></div>Subir 1 foto</div>
+          <div class="feat off"><div class="ck ck-off"></div>PDFs y archivos</div>
+          <div class="feat off"><div class="ck ck-off"></div>Scripts de ventas</div>
+        </div>
+        <button class="pbtn btn-ghost" onclick="goToChat('FREE','Gratis')">Empezar gratis →</button>
+      </div>
+      <div class="card card-basic">
+        <div><div class="plan-tag">Básico</div><div class="plan-name">Starter</div></div>
+        <div class="price-block"><span class="amt">$5</span><span class="per">/mes</span></div>
+        <div class="sep"></div>
+        <div class="feats">
+          <div class="feat on"><div class="ck ck-on"><svg viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="#b8880a" stroke-width="1.8" stroke-linecap="round"/></svg></div>Chat ilimitado</div>
+          <div class="feat on"><div class="ck ck-on"><svg viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="#b8880a" stroke-width="1.8" stroke-linecap="round"/></svg></div>20 imágenes/mes</div>
+          <div class="feat on"><div class="ck ck-on"><svg viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="#b8880a" stroke-width="1.8" stroke-linecap="round"/></svg></div>Fotos + PDFs</div>
+          <div class="feat off"><div class="ck ck-off"></div>Word y txt</div>
+          <div class="feat off"><div class="ck ck-off"></div>Scripts de ventas</div>
+        </div>
+        <a class="pbtn btn-mp-basic" href="https://www.mercadopago.com.ar/subscriptions/checkout?preapproval_plan_id=d43020184b684608883efc3e7275a762" target="_blank">💳 Suscribirse</a>
+      </div>
+      <div class="card card-pro">
+        <span class="pop-badge">POPULAR</span>
+        <div><div class="plan-tag">Pro</div><div class="plan-name">Creator</div></div>
+        <div class="price-block"><span class="amt">$10</span><span class="per">/mes</span></div>
+        <div class="sep"></div>
+        <div class="feats">
+          <div class="feat on"><div class="ck ck-on"><svg viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="#b8880a" stroke-width="1.8" stroke-linecap="round"/></svg></div>Chat ilimitado</div>
+          <div class="feat on"><div class="ck ck-on"><svg viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="#b8880a" stroke-width="1.8" stroke-linecap="round"/></svg></div>100 imágenes/mes</div>
+          <div class="feat on"><div class="ck ck-on"><svg viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="#b8880a" stroke-width="1.8" stroke-linecap="round"/></svg></div>Fotos + PDFs + Word</div>
+          <div class="feat on"><div class="ck ck-on"><svg viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="#b8880a" stroke-width="1.8" stroke-linecap="round"/></svg></div>Scripts de ventas</div>
+          <div class="feat off"><div class="ck ck-off"></div>Prioridad total</div>
+        </div>
+        <a class="pbtn btn-mp-pro" href="https://www.mercadopago.com.ar/subscriptions/checkout?preapproval_plan_id=bd5dec5c8a564e2486d0c4b6b46a2cfe" target="_blank">💳 Suscribirse</a>
+      </div>
+      <div class="card card-elite">
+        <div><div class="plan-tag">Élite</div><div class="plan-name">Máximo</div></div>
+        <div class="price-block"><span class="amt">$25</span><span class="per">/mes</span></div>
+        <div class="sep"></div>
+        <div class="feats">
+          <div class="feat on"><div class="ck ck-on"><svg viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="#b8880a" stroke-width="1.8" stroke-linecap="round"/></svg></div>Todo lo del Pro</div>
+          <div class="feat on"><div class="ck ck-on"><svg viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="#b8880a" stroke-width="1.8" stroke-linecap="round"/></svg></div>Imágenes ilimitadas</div>
+          <div class="feat on"><div class="ck ck-on"><svg viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="#b8880a" stroke-width="1.8" stroke-linecap="round"/></svg></div>Todos los archivos</div>
+          <div class="feat on"><div class="ck ck-on"><svg viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="#b8880a" stroke-width="1.8" stroke-linecap="round"/></svg></div>Prioridad total</div>
+          <div class="feat on"><div class="ck ck-on"><svg viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="#b8880a" stroke-width="1.8" stroke-linecap="round"/></svg></div>Soporte prioritario</div>
+        </div>
+        <a class="pbtn btn-mp-elite" href="https://www.mercadopago.com.ar/subscriptions/checkout?preapproval_plan_id=910b05d352064342aef50950d8fada21" target="_blank">💳 Suscribirse</a>
+      </div>
+    </div>
+    <div class="foot">
+      <span>🔒 Pagos con <strong>MercadoPago</strong></span>
+      <span style="color:rgba(255,255,255,0.1)">·</span>
+      <span>Cancelá cuando quieras</span>
+      <span style="color:rgba(255,255,255,0.1)">·</span>
+      <span>por Benja Ruizdiaz</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CHAT ══ -->
+<div id="screen-chat">
+  <div class="chat-header">
+    <div class="chat-logo">⚡</div>
+    <div class="chat-info">
+      <h2>ZEUS <span class="plan-pill" id="plan-pill">FREE</span></h2>
+      <p id="plan-sub">por Benja Ruizdiaz</p>
+    </div>
+    <div class="chat-status"><div class="status-dot"></div>EN LÍNEA</div>
+    <button class="hbtn" onclick="openHistory()">📋</button>
+    <button class="hbtn hbtn-gold" onclick="openVoiceScreen()">🎙️</button>
+    <button class="back-btn" onclick="goBack()">← Planes</button>
+  </div>
+  <div class="limit-bar" id="limit-bar"></div>
+  <div id="messages"></div>
+  <div id="input-area">
+    <div class="chips" id="chips"></div>
+    <div id="attach-preview">
+      <span id="attach-name">📎 archivo</span>
+      <button id="attach-remove" onclick="removeAttachment()">✕</button>
+    </div>
+    <div class="input-row">
+      <textarea id="user-input" placeholder="Escribile a ZEUS..." rows="1"></textarea>
+      <button class="ibtn" onclick="openFileInput()" title="Adjuntar">📎</button>
+      <button class="ibtn" id="trending-btn" onclick="openTrending()" title="Trending">🔥</button>
+      <button class="ibtn" id="voice-btn" onclick="toggleVoiceInput()" title="Voz">🎤</button>
+      <button id="send-btn" onclick="sendMessage()"><svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg></button>
+    </div>
+    <p class="hint">Enter para enviar · 📎 adjuntar · 🔥 trending · 🎤 voz · 🎙️ modo voz</p>
+  </div>
+  <input type="file" id="file-input" onchange="handleFile(event)">
+</div>
+
+<script>
+const SERVER = 'https://zeus-production-8f65.up.railway.app';
+const ADMIN_PASS = 'ADMINbenja2026';
+const MP = {
+  BASICO: 'https://www.mercadopago.com.ar/subscriptions/checkout?preapproval_plan_id=d43020184b684608883efc3e7275a762',
+  PRO:    'https://www.mercadopago.com.ar/subscriptions/checkout?preapproval_plan_id=bd5dec5c8a564e2486d0c4b6b46a2cfe',
+  ELITE:  'https://www.mercadopago.com.ar/subscriptions/checkout?preapproval_plan_id=910b05d352064342aef50950d8fada21'
+};
+const PLAN_FILES = {
+  FREE:   ['image/jpeg','image/png','image/gif','image/webp'],
+  BASICO: ['image/jpeg','image/png','image/gif','image/webp','application/pdf'],
+  PRO:    ['image/jpeg','image/png','image/gif','image/webp','application/pdf','text/plain','application/msword','application/vnd.openxmlformats-officedocument.wordprocessingml.document'],
+  ELITE:  ['image/jpeg','image/png','image/gif','image/webp','application/pdf','text/plain','application/msword','application/vnd.openxmlformats-officedocument.wordprocessingml.document','text/csv']
+};
+const PLAN_LIMITS = {
+  FREE:   { mensajes: 10, imagenes: 2 },
+  BASICO: { mensajes: Infinity, imagenes: 20 },
+  PRO:    { mensajes: Infinity, imagenes: 100 },
+  ELITE:  { mensajes: Infinity, imagenes: Infinity }
+};
+const CHIPS = {
+  FREE:   ['💡 Dame una idea','📚 Explicame algo','🎨 Generá una imagen'],
+  BASICO: ['💡 Idea de negocio','✍️ Ayudame con un texto','🎨 Generá una imagen'],
+  PRO:    ['✍️ Escribime un copy','📊 Estrategia de marketing','🎨 Generá una imagen','🎯 Script de ventas'],
+  ELITE:  ['💡 Estrategia de negocio','✍️ Copy de alto impacto','🎨 Generá una imagen','🎯 Script profesional']
+};
+
+let history = [], currentPlan = 'FREE', msgCount = 0, imgCount = 0;
+let sessionId = 'zeus_' + Math.random().toString(36).substr(2, 9);
+let attachedFile = null, isAdmin = false;
+let currentChatId = null;
+let logoClicks = 0, logoTimer = null;
+
+const messagesEl = document.getElementById('messages');
+const inputEl = document.getElementById('user-input');
+const fileInput = document.getElementById('file-input');
+
+// ── UTILS ─────────────────────────────────────────────
+function parseMarkdown(text) {
+  return text
+    .replace(/```(\w+)?\n?([\s\S]*?)```/g, '<pre><code>$2</code></pre>')
+    .replace(/`([^`]+)`/g, '<code>$1</code>')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g, '<em>$1</em>')
+    .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+    .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+    .replace(/^# (.+)$/gm, '<h1>$1</h1>')
+    .replace(/^- (.+)$/gm, '<li>$1</li>')
+    .replace(/^\d+\. (.+)$/gm, '<li>$1</li>')
+    .replace(/^---$/gm, '<hr>')
+    .replace(/\n/g, '<br>');
+}
+
+function showTyping(label) {
+  removeTyping();
+  const d = document.createElement('div');
+  d.className = 'msg zeus'; d.id = 'typing-msg';
+  d.innerHTML = label
+    ? `<div class="msg-av zeus-av">⚡</div><div class="bubble" style="color:rgba(255,255,255,0.3);font-size:13px;font-style:italic;">${label}</div>`
+    : `<div class="msg-av zeus-av">⚡</div><div class="bubble typing-bubble"><span></span><span></span><span></span></div>`;
+  messagesEl.appendChild(d);
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+}
+function removeTyping() { const t = document.getElementById('typing-msg'); if(t) t.remove(); }
+
+function addMsg(role, text, imgB64, imgPrompt) {
+  const isZeus = role === 'zeus';
+  const d = document.createElement('div');
+  d.className = `msg ${isZeus ? 'zeus' : 'user'}`;
+  const av = `<div class="msg-av ${isZeus ? 'zeus-av' : 'user-av'}">${isZeus ? '⚡' : 'VOS'}</div>`;
+  let c = `<div class="bubble">`;
+  if (text) c += isZeus ? parseMarkdown(text) : text.replace(/\n/g,'<br>');
+  if (imgB64) {
+    const src = `data:image/jpeg;base64,${imgB64}`;
+    c += `<img src="${src}" class="gen-image"/>`;
+    c += `<p class="img-label">📝 ${imgPrompt.substring(0,90)}...</p>`;
+    c += `<span class="dl-btn" onclick="dlImg('${src}')">⬇️ Descargar</span>`;
+    c += `<span class="share-btn" onclick="shareImg('${src}')">📤 Compartir</span>`;
+    localStorage.setItem('zeus_total_imgs', (parseInt(localStorage.getItem('zeus_total_imgs')||'0')+1).toString());
+  }
+  c += `</div>`;
+  d.innerHTML = av + c;
+  messagesEl.appendChild(d);
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+  saveChatToHistory();
+}
+
+function addUserMsgWithFile(text, file) {
+  const d = document.createElement('div');
+  d.className = 'msg user';
+  let c = `<div class="msg-av user-av">VOS</div><div class="bubble">`;
+  if (text) c += text.replace(/\n/g,'<br>');
+  if (file) {
+    if (file.kind === 'image') c += `<img src="data:${file.type};base64,${file.base64}" class="preview-img"/>`;
+    else c += `<div class="file-badge">${file.kind==='pdf'?'📄':'📝'} ${file.name}</div>`;
+  }
+  c += `</div>`;
+  d.innerHTML = c;
+  messagesEl.appendChild(d);
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+}
+
+function dlImg(src) { const a = document.createElement('a'); a.href=src; a.download='zeus-imagen.png'; a.click(); }
+
+async function shareImg(src) {
+  try {
+    const blob = await (await fetch(src)).blob();
+    const file = new File([blob], 'zeus-imagen.png', { type:'image/png' });
+    if (navigator.share && navigator.canShare({ files:[file] })) {
+      await navigator.share({ files:[file], title:'⚡ ZEUS IA', text:'Mirá lo que ZEUS hizo 🔥 marvelous-dasik-a0e79a.netlify.app' });
+    } else { dlImg(src); }
+  } catch(e) { dlImg(src); }
+}
+
+function showChips(opts) {
+  const chips = document.getElementById('chips');
+  chips.innerHTML = '';
+  opts.forEach(opt => {
+    const b = document.createElement('button');
+    b.className='chip'; b.textContent=opt;
+    b.onclick = () => { inputEl.value=opt; sendMessage(); chips.innerHTML=''; };
+    chips.appendChild(b);
+  });
+}
+
+function showUpgrade(tipo) {
+  const d = document.createElement('div');
+  d.className = 'msg zeus';
+  d.innerHTML = `<div class="msg-av zeus-av">⚡</div><div class="bubble"><div class="upgrade-banner">
+    <p>⚠️ Alcanzaste el límite de ${tipo}. Suscribite para continuar:</p>
+    <div class="upgrade-btns">
+      <a class="upgrade-btn u-basic" href="${MP.BASICO}" target="_blank">⚡ Básico — $5/mes</a>
+      <a class="upgrade-btn u-pro" href="${MP.PRO}" target="_blank">🔥 Pro — $10/mes</a>
+      <a class="upgrade-btn u-elite" href="${MP.ELITE}" target="_blank">👑 Élite — $25/mes</a>
+    </div>
+  </div></div>`;
+  messagesEl.appendChild(d);
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+}
+
+function updateLimitBar() {
+  const bar = document.getElementById('limit-bar');
+  if (isAdmin) { bar.innerHTML=`<div class="limit-item">🔐 Admin: <span>todo ilimitado</span></div>`; return; }
+  const l = PLAN_LIMITS[currentPlan];
+  const msgs = l.mensajes===Infinity ? 'ilimitado' : `${msgCount}/${l.mensajes}`;
+  const imgs = l.imagenes===Infinity ? 'ilimitado' : `${imgCount}/${l.imagenes}`;
+  bar.innerHTML = `<div class="limit-item">💬 <span>${msgs}</span></div><div class="limit-item">🎨 <span>${imgs}</span></div>`;
+}
+
+// ── PRICING / CHAT NAV ────────────────────────────────
+function goToChat(plan, label) {
+  currentPlan = plan; msgCount = 0; imgCount = 0; attachedFile = null; currentChatId = null;
+  const pill = document.getElementById('plan-pill');
+  pill.textContent = isAdmin ? `${plan} 🔐` : plan;
+  pill.className = isAdmin ? 'plan-pill admin-pill' : 'plan-pill';
+  document.getElementById('plan-sub').textContent = label + ' · por Benja Ruizdiaz';
+  document.getElementById('screen-pricing').style.display = 'none';
+  document.getElementById('screen-chat').classList.add('active');
+  history = []; messagesEl.innerHTML = '';
+  updateLimitBar();
+  const w = {
+    FREE:   `⚡ ¡Hola! Soy ZEUS, tu asistente IA creado por Benja Ruizdiaz.\nPlan FREE — 10 mensajes y 2 imágenes por día. ¿En qué te ayudo? 🚀`,
+    BASICO: `⚡ ¡Bienvenido al plan BÁSICO!\nChat ilimitado, 20 imágenes/mes y análisis de PDFs. ¿Por dónde empezamos? 🚀`,
+    PRO:    `🔥 ¡Bienvenido al plan PRO!\nTodos los modos, scripts de ventas y 100 imágenes/mes. ¿Qué creamos? 🚀`,
+    ELITE:  `👑 ¡Bienvenido al plan ÉLITE!\nTodo ilimitado. Estoy a tu disposición. 🚀`
+  };
+  addMsg('zeus', isAdmin ? `🔐 Modo Admin — Plan ${plan} sin límites. ¿Qué hacemos? ⚡` : (w[plan]||w.FREE));
+  showChips(CHIPS[plan]||CHIPS.FREE);
+}
+
+function goBack() {
+  document.getElementById('screen-chat').classList.remove('active');
+  document.getElementById('screen-pricing').style.display = 'flex';
+  removeAttachment(); isAdmin = false;
+}
+
+// ── FILE HANDLING ─────────────────────────────────────
+function openFileInput() {
+  const allowed = isAdmin ? [...new Set(Object.values(PLAN_FILES).flat())] : (PLAN_FILES[currentPlan]||PLAN_FILES.FREE);
+  fileInput.accept = allowed.join(',');
+  fileInput.click();
+}
+
+function handleFile(event) {
+  const file = event.target.files[0]; if(!file) return;
+  const allowed = isAdmin ? [...new Set(Object.values(PLAN_FILES).flat())] : (PLAN_FILES[currentPlan]||PLAN_FILES.FREE);
+  if (!allowed.includes(file.type)) { addMsg('zeus','⚠️ Tu plan no permite ese tipo de archivo.'); fileInput.value=''; return; }
+  const reader = new FileReader();
+  reader.onload = e => {
+    const result = e.target.result;
+    if (file.type.startsWith('image/')) attachedFile = { name:file.name, type:file.type, base64:result.split(',')[1], kind:'image' };
+    else if (file.type==='application/pdf') attachedFile = { name:file.name, type:file.type, base64:result.split(',')[1], kind:'pdf' };
+    else attachedFile = { name:file.name, type:file.type, text:result, kind:'text' };
+    document.getElementById('attach-name').textContent = `📎 ${file.name}`;
+    document.getElementById('attach-preview').classList.add('show');
+  };
+  if (file.type.startsWith('image/') || file.type==='application/pdf') reader.readAsDataURL(file);
+  else reader.readAsText(file);
+  fileInput.value='';
+}
+
+function removeAttachment() {
+  attachedFile = null;
+  document.getElementById('attach-preview').classList.remove('show');
+}
+
+// ── SEND MESSAGE ──────────────────────────────────────
+async function sendMessage() {
+  const text = inputEl.value.trim();
+  if (!text && !attachedFile) return;
+  const limits = isAdmin ? { mensajes:Infinity, imagenes:Infinity } : PLAN_LIMITS[currentPlan];
+  if (!isAdmin && currentPlan==='FREE' && msgCount>=limits.mensajes) { showUpgrade('mensajes'); return; }
+
+  document.getElementById('chips').innerHTML='';
+  inputEl.value=''; inputEl.style.height='auto';
+  const file = attachedFile; removeAttachment();
+  addUserMsgWithFile(text, file);
+
+  let userContent = text || '';
+  if (file) {
+    if (file.kind==='image') userContent = (text?text+'\n\n':'') + 'Analizá esta imagen.';
+    else if (file.kind==='pdf') userContent = (text?text+'\n\n':'') + `[PDF: "${file.name}". Analizalo.]`;
+    else userContent = (text?text+'\n\n':'') + `Contenido de "${file.name}":\n\n${file.text}`;
+  }
+  history.push({ role:'user', content:userContent });
+  if (!isAdmin) { msgCount++; updateLimitBar(); }
+  showTyping();
+
+  try {
+    const body = { messages:history, plan:isAdmin?'ELITE':currentPlan, sessionId, chatId:currentChatId };
+    if (file && file.kind==='image') { body.imageBase64=file.base64; body.imageType=file.type; }
+    if (file && file.kind==='pdf') body.pdfBase64=file.base64;
+
+    const res = await fetch(`${SERVER}/chat`, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) });
+    const data = await res.json();
+    removeTyping();
+    if (data.error) { addMsg('zeus','⚠️ Error: '+data.error); return; }
+    const reply = data.text || '';
+    history.push({ role:'assistant', content:reply });
+    try {
+      const clean = reply.trim().replace(/^```json\n?/,'').replace(/\n?```$/,'');
+      const parsed = JSON.parse(clean);
+      if (parsed.action==='generate_image' && parsed.prompt) { await generateImage(parsed.prompt, parsed.description||'Generando...'); return; }
+    } catch(e){}
+    addMsg('zeus', reply);
+  } catch(e) { removeTyping(); addMsg('zeus','⚠️ No se pudo conectar con el servidor.'); }
+}
+
+async function generateImage(prompt, description) {
+  const limits = isAdmin ? { imagenes:Infinity } : PLAN_LIMITS[currentPlan];
+  if (!isAdmin && limits.imagenes!==Infinity && imgCount>=limits.imagenes) { showUpgrade('imágenes'); return; }
+  if (!isAdmin) { imgCount++; updateLimitBar(); }
+  addMsg('zeus',`🎨 ${description}\nGenerando imagen...`);
+  showTyping('🎨 Creando tu imagen...');
+  try {
+    const res = await fetch(`${SERVER}/generate-image`, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({prompt,plan:currentPlan,sessionId}) });
+    const data = await res.json();
+    removeTyping();
+    if (data.success && data.imageBase64) addMsg('zeus','✨ ¡Aquí está!', data.imageBase64, prompt);
+    else addMsg('zeus',`⚠️ ${data.error||'No se pudo generar.'}`);
+  } catch(e) { removeTyping(); addMsg('zeus','⚠️ Error de conexión.'); }
+}
+
+// ── VOICE INPUT (en chat) ─────────────────────────────
+let voiceRec = null, voiceOn = false;
+function toggleVoiceInput() {
+  if (voiceOn) { stopVoiceInput(); return; }
+  if (!('webkitSpeechRecognition' in window||'SpeechRecognition' in window)) { addMsg('zeus','⚠️ Usá Chrome para voz.'); return; }
+  const SR = window.SpeechRecognition||window.webkitSpeechRecognition;
+  voiceRec = new SR(); voiceRec.lang='es-AR'; voiceRec.continuous=false; voiceRec.interimResults=true;
+  voiceRec.onstart = () => { voiceOn=true; document.getElementById('voice-btn').classList.add('recording'); document.getElementById('voice-btn').textContent='⏹️'; inputEl.placeholder='🎤 Escuchando...'; };
+  voiceRec.onresult = e => { let t=''; for(let i=0;i<e.results.length;i++) t+=e.results[i][0].transcript; inputEl.value=t; };
+  voiceRec.onend = () => { stopVoiceInput(); if(inputEl.value.trim()) setTimeout(()=>sendMessage(),300); };
+  voiceRec.onerror = () => stopVoiceInput();
+  voiceRec.start();
+}
+function stopVoiceInput() {
+  voiceOn=false;
+  document.getElementById('voice-btn').classList.remove('recording');
+  document.getElementById('voice-btn').textContent='🎤';
+  inputEl.placeholder='Escribile a ZEUS...';
+  if(voiceRec) try{voiceRec.stop();}catch(e){}
+}
+
+// ── VOICE SCREEN ──────────────────────────────────────
+let vsRec=null, vsOn=false, vsSpeaking=false;
+function openVoiceScreen() { document.getElementById('screen-voice').classList.add('active'); }
+function closeVoiceScreen() { stopVS(); document.getElementById('screen-voice').classList.remove('active'); }
+function toggleVoice() { if(vsSpeaking){stopSpeak();return;} if(vsOn){stopVS();return;} startVS(); }
+
+function startVS() {
+  if(!('webkitSpeechRecognition' in window||'SpeechRecognition' in window)){document.getElementById('voice-status').textContent='⚠️ Usá Chrome';return;}
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  vsRec=new SR(); vsRec.lang='es-AR'; vsRec.continuous=false; vsRec.interimResults=true;
+  vsRec.onstart=()=>{vsOn=true;document.getElementById('voice-orb').className='voice-orb listening';document.getElementById('orb-icon').textContent='🎤';document.getElementById('voice-status').className='voice-status active';document.getElementById('voice-status').textContent='Escuchando...';document.getElementById('voice-transcript').textContent='';document.getElementById('voice-response').textContent='';};
+  vsRec.onresult=e=>{let t='';for(let i=0;i<e.results.length;i++)t+=e.results[i][0].transcript;document.getElementById('voice-transcript').textContent=t;};
+  vsRec.onend=async()=>{vsOn=false;const t=document.getElementById('voice-transcript').textContent;if(!t.trim()){resetOrb();return;}document.getElementById('voice-status').textContent='Procesando...';document.getElementById('orb-icon').textContent='⏳';await sendVoiceMsg(t);};
+  vsRec.onerror=()=>{vsOn=false;resetOrb();};
+  vsRec.start();
+}
+function stopVS(){vsOn=false;if(vsRec)try{vsRec.stop();}catch(e){}}
+function resetOrb(){document.getElementById('voice-orb').className='voice-orb';document.getElementById('orb-icon').textContent='⚡';document.getElementById('voice-status').className='voice-status';document.getElementById('voice-status').textContent='Tocá para hablar';}
+
+async function sendVoiceMsg(text) {
+  try {
+    const res = await fetch(`${SERVER}/chat`, {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:[...history,{role:'user',content:text}],plan:isAdmin?'ELITE':currentPlan,sessionId})});
+    const data = await res.json();
+    const reply = data.text||'No pude responder.';
+    history.push({role:'user',content:text});
+    history.push({role:'assistant',content:reply});
+    saveChatToHistory();
+    document.getElementById('voice-response').textContent = reply;
+    speakReply(reply);
+  } catch(e) { document.getElementById('voice-status').textContent='⚠️ Error'; resetOrb(); }
+}
+
+function speakReply(text) {
+  if(!('speechSynthesis' in window)){resetOrb();return;}
+  window.speechSynthesis.cancel();
+  const clean = text.replace(/[\u{1F300}-\u{1F9FF}]/gu,'').replace(/[⚡⚠️✅❌🎨👑🔥]/g,'').trim();
+  const utt = new SpeechSynthesisUtterance(clean);
+  utt.lang='es-AR'; utt.rate=1.0; utt.pitch=1.0;
+  const voices = window.speechSynthesis.getVoices();
+  const esV = voices.find(v=>v.lang.startsWith('es'));
+  if(esV) utt.voice=esV;
+  vsSpeaking=true;
+  document.getElementById('voice-orb').className='voice-orb speaking';
+  document.getElementById('orb-icon').textContent='🔊';
+  document.getElementById('voice-status').className='voice-status speaking';
+  document.getElementById('voice-status').textContent='ZEUS habla... (tocá para parar)';
+  utt.onend=()=>{vsSpeaking=false;resetOrb();};
+  window.speechSynthesis.speak(utt);
+}
+function stopSpeak(){window.speechSynthesis.cancel();vsSpeaking=false;resetOrb();}
+
+// ── TRENDING ──────────────────────────────────────────
+function openTrending(){document.getElementById('trending-modal').classList.add('show');}
+function closeTrending(){document.getElementById('trending-modal').classList.remove('show');}
+function usePrompt(t){closeTrending();inputEl.value=t;sendMessage();}
+
+// ── HISTORY ───────────────────────────────────────────
+function saveChatToHistory() {
+  if(!history||history.length===0) return;
+  const chats = JSON.parse(localStorage.getItem('zeus_chats')||'[]');
+  const idx = currentChatId ? chats.findIndex(c=>c.id===currentChatId) : -1;
+  const chat = { id:currentChatId||Date.now().toString(), plan:currentPlan, date:new Date().toLocaleString('es-AR',{day:'2-digit',month:'2-digit',year:'2-digit',hour:'2-digit',minute:'2-digit'}), timestamp:Date.now(), messages:history, preview:history.find(m=>m.role==='user')?.content?.substring(0,100)||'Chat' };
+  if(!currentChatId) currentChatId=chat.id;
+  if(idx>=0) chats[idx]=chat; else chats.unshift(chat);
+  localStorage.setItem('zeus_chats', JSON.stringify(chats.slice(0,50)));
+}
+
+function openHistory() {
+  saveChatToHistory();
+  renderHistory();
+  document.getElementById('screen-history').classList.add('active');
+}
+function closeHistory(){document.getElementById('screen-history').classList.remove('active');}
+
+function renderHistory() {
+  const chats = JSON.parse(localStorage.getItem('zeus_chats')||'[]');
+  const list = document.getElementById('history-list');
+  if(chats.length===0){list.innerHTML='<div class="hist-empty">💬<br>No hay chats guardados todavía.</div>';return;}
+  list.innerHTML = chats.map(c=>`
+    <div class="hist-item" onclick="loadChat('${c.id}')">
+      <div class="hist-item-top"><span class="hist-plan">${c.plan}</span><span class="hist-date">${c.date}</span></div>
+      <div class="hist-preview">${c.preview}</div>
+      <div class="hist-count">💬 ${c.messages.length} mensajes</div>
+    </div>`).join('');
+}
+
+function loadChat(id) {
+  const chats = JSON.parse(localStorage.getItem('zeus_chats')||'[]');
+  const chat = chats.find(c=>c.id===id);
+  if(!chat) return;
+  closeHistory();
+  currentChatId=chat.id; currentPlan=chat.plan; history=chat.messages;
+  document.getElementById('plan-pill').textContent=chat.plan;
+  document.getElementById('screen-pricing').style.display='none';
+  document.getElementById('screen-chat').classList.add('active');
+  messagesEl.innerHTML='';
+  chat.messages.forEach(m=>addMsg(m.role==='user'?'user':'zeus',m.content));
+  updateLimitBar();
+}
+
+function startNewChat() {
+  saveChatToHistory();
+  closeHistory();
+  currentChatId=null; history=[]; messagesEl.innerHTML='';
+  addMsg('zeus','⚡ ¡Nuevo chat! ¿En qué te ayudo? 🚀');
+  showChips(CHIPS[currentPlan]||CHIPS.FREE);
+}
+
+function clearAllHistory() {
+  if(!confirm('¿Borrar todo el historial?')) return;
+  localStorage.removeItem('zeus_chats');
+  currentChatId=null;
+  renderHistory();
+}
+
+// ── ADMIN ─────────────────────────────────────────────
+let _lc = 0, _lt = null;
+function logoClick() {
+  _lc++;
+  clearTimeout(_lt);
+  if(_lc>=5){_lc=0;openAdminModal();}
+  else _lt=setTimeout(()=>_lc=0,2000);
+}
+
+function openAdminModal() {
+  document.getElementById('admin-modal').classList.add('show');
+  document.getElementById('admin-pass').value='';
+  setTimeout(()=>document.getElementById('admin-pass').focus(),100);
+}
+function closeAdminModal(){document.getElementById('admin-modal').classList.remove('show');}
+
+async function verifyAdmin() {
+  const pass = document.getElementById('admin-pass').value;
+  try {
+    const res = await fetch(`${SERVER}/verify-admin`, {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:pass})});
+    const data = await res.json();
+    if(data.success){isAdmin=true;closeAdminModal();openAdminDash();}
+    else{document.getElementById('admin-pass').style.borderColor='#ff6b6b';setTimeout(()=>document.getElementById('admin-pass').style.borderColor='',1000);}
+  } catch(e){alert('No se pudo conectar con el servidor.');}
+}
+
+function openAdminDash() {
+  document.getElementById('screen-admin').classList.add('active');
+  loadAdminData();
+}
+
+async function loadAdminData() {
+  // Mostrar loading
+  document.getElementById('stat-chats').textContent = '...';
+  document.getElementById('stat-msgs').textContent = '...';
+  document.getElementById('stat-imgs').textContent = '...';
+  document.getElementById('stat-days').textContent = '...';
+  document.getElementById('admin-chat-list').innerHTML = '<div style="text-align:center;padding:16px;color:rgba(255,255,255,0.3);font-size:13px;">Cargando...</div>';
+
+  try {
+    // Cargar stats
+    const statsRes = await fetch(`${SERVER}/admin/stats`, {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ password: ADMIN_PASS })
+    });
+    const statsData = await statsRes.json();
+
+    if (statsData.success) {
+      document.getElementById('stat-chats').textContent = statsData.totalChats || 0;
+      document.getElementById('stat-msgs').textContent = statsData.recentStats?.filter(s=>s.event==='chat').length || 0;
+      document.getElementById('stat-imgs').textContent = statsData.recentStats?.filter(s=>s.event==='image').length || 0;
+      document.getElementById('stat-days').textContent = statsData.totalSessions || 0;
+
+      // Actualizar labels
+      document.querySelector('[data-lbl="imgs"]') && (document.querySelector('[data-lbl="imgs"]').textContent = 'Usuarios únicos');
+    }
+
+    // Cargar chats
+    const chatsRes = await fetch(`${SERVER}/admin/chats`, {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ password: ADMIN_PASS })
+    });
+    const chatsData = await chatsRes.json();
+
+    const list = document.getElementById('admin-chat-list');
+    if (!chatsData.chats || chatsData.chats.length === 0) {
+      list.innerHTML = '<div style="text-align:center;padding:16px;color:rgba(255,255,255,0.2);font-size:13px;">No hay chats en la nube todavía</div>';
+    } else {
+      list.innerHTML = chatsData.chats.map(c => `
+        <div class="adm-chat-item" onclick="adminViewChat('${c.id}')">
+          <div class="aci-top">
+            <span class="aci-plan">${c.plan}</span>
+            <span style="font-size:10px;color:rgba(255,255,255,0.2);margin-left:4px;">📱 ${c.session_id?.substring(0,8)}...</span>
+            <span class="aci-date">${new Date(c.updated_at).toLocaleString('es-AR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})}</span>
+          </div>
+          <div class="aci-preview">${c.preview||'Sin preview'}</div>
+          <div class="aci-count">💬 ${c.messages?.length||0} mensajes
+            <button onclick="event.stopPropagation();adminDeleteChat('${c.id}')" style="margin-left:8px;background:rgba(255,50,50,0.1);border:0.5px solid rgba(255,50,50,0.2);color:#ff6b6b;font-size:10px;padding:2px 7px;border-radius:5px;cursor:pointer;font-family:'Inter',sans-serif;">🗑️</button>
+          </div>
+        </div>`).join('');
+    }
+  } catch(e) {
+    document.getElementById('admin-chat-list').innerHTML = '<div style="text-align:center;padding:16px;color:#ff6b6b;font-size:13px;">⚠️ Error al cargar datos</div>';
+  }
+}
+
+function adminViewChat(id) {
+  // Buscar en los chats cargados y mostrar mensajes
+  const items = document.querySelectorAll('.adm-chat-item');
+  // Por ahora solo mostramos el chat localmente si está disponible
+  const chats = JSON.parse(localStorage.getItem('zeus_chats')||'[]');
+  const chat = chats.find(c=>c.id===id);
+  if (chat) adminLoadChat(id);
+}
+
+async function adminDeleteChat(id) {
+  if (!confirm('¿Borrar este chat?')) return;
+  await fetch(`${SERVER}/admin/delete-chat`, {
+    method: 'POST', headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ password: ADMIN_PASS, chatId: id })
+  });
+  loadAdminData();
+}
+
+function closeAdminDash(){isAdmin=false;document.getElementById('screen-admin').classList.remove('active');}
+
+function adminGoChat(plan,label){document.getElementById('screen-admin').classList.remove('active');goToChat(plan,label);}
+
+function adminLoadChat(id){
+  const chats=JSON.parse(localStorage.getItem('zeus_chats')||'[]');
+  const chat=chats.find(c=>c.id===id);if(!chat)return;
+  document.getElementById('screen-admin').classList.remove('active');
+  currentChatId=chat.id;currentPlan=chat.plan;history=chat.messages;
+  document.getElementById('plan-pill').textContent=chat.plan;
+  document.getElementById('screen-pricing').style.display='none';
+  document.getElementById('screen-chat').classList.add('active');
+  messagesEl.innerHTML='';
+  chat.messages.forEach(m=>addMsg(m.role==='user'?'user':'zeus',m.content));
+  updateLimitBar();
+}
+
+function adminClearChats(){if(!confirm('¿Borrar todo?'))return;localStorage.removeItem('zeus_chats');currentChatId=null;openAdminDash();}
+
+// ── INPUT EVENTS ──────────────────────────────────────
+inputEl.addEventListener('keydown', e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage();}});
+inputEl.addEventListener('input', ()=>{inputEl.style.height='auto';inputEl.style.height=Math.min(inputEl.scrollHeight,120)+'px';});
+</script>
+<script>
+if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js');}
+</script>
+</body>
+</html>

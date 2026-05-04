@@ -1,0 +1,15 @@
+{
+  "name": "zeus-server",
+  "version": "1.0.0",
+  "description": "ZEUS IA Server por Benja Ruizdiaz",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "pdf-parse": "^1.1.4"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
