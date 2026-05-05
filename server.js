@@ -15,7 +15,7 @@ const GROQ_API_KEY      = process.env.GROQ_API_KEY      || 'TU_API_KEY_DE_GROQ_A
 const REPLICATE_API_KEY = process.env.REPLICATE_API_KEY || 'TU_TOKEN_DE_REPLICATE_ACÁ';
 const ADMIN_PASSWORD    = process.env.ADMIN_PASSWORD    || 'ADMINZEUS2026';
 const SUPABASE_KEY      = process.env.SUPABASE_KEY      || '';
-const SUPABASE_KEY      = process.env.SUPABASE_KEY      || 'TU_SUPABASE_KEY_ACA';
+const SUPABASE_KEY      = process.env.SUPABASE_KEY      || '';
 
 // Instalar pdf-parse si no está
 try { require.resolve('pdf-parse'); }
